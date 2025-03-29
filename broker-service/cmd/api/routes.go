@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func(app *Config) routes() http.Handler {
+func (app *Config) routes() http.Handler {
 	mux := chi.NewRouter()
 
 	// specify who is allowed to connect
@@ -24,8 +24,11 @@ func(app *Config) routes() http.Handler {
 
 	mux.Use(middleware.Heartbeat("/ping"))
 
-	mux.Post("/",app.Broker)
+	mux.Post("/", app.Broker)
 
-	mux.Post("/handle",app.HandleSubmission)
+	// grpc route is seperate
+	mux.Post("/log-grpc", app.LogViaGRPC)
+
+	mux.Post("/handle", app.HandleSubmission)
 	return mux
 }
